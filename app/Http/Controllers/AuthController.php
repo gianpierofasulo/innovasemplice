@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Services\BreweriesService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -19,6 +20,8 @@ class AuthController extends Controller
             return response()->json(['message' => 'Invalid credentials'], 401);
         }
         $token = $user->createToken('auth_token')->plainTextToken;
+
+       // app(BreweriesService::class)->getAll(1, 10);
 
         return response()->json(['token' => $token], 200);
 

@@ -51,7 +51,8 @@ class AuthenticatedSessionController extends Controller
             $token = $response->json()['token'];
             session(['apiToken' => $token]);
 
-           return view('dashboard', ['apiToken' => $token]);
+          // return view('dashboard', ['apiToken' => $token]);
+          return view('dashboard');
 
         }
 

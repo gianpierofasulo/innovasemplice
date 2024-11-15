@@ -10,19 +10,20 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
                     <div id="breweriesSection">
-                        <h2>Lista di Birrifici</h2>
 
-                        <table id="breweryTable">
-                            <thead>
-                                <tr>
-                                    <th>Nome</th>
-                                    <th>Tipo</th>
-                                    <th>Città</th>
-                                    <th>Stato</th>
-                                    <th>Website</th>
-                                </tr>
-                            </thead>
-                            <tbody>
+                                @if(isset($items) && count($items) > 0)
+                                <h2>Lista di Birrifici</h2>
+                                <table id="breweryTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Nome</th>
+                                            <th>Tipo</th>
+                                            <th>Città</th>
+                                            <th>Stato</th>
+                                            <th>Website</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
                                 @foreach ($items as $item)
                                 <tr>
                                         <th>{{ $item['name'] }}</th>
@@ -32,10 +33,15 @@
                                         <th>{{ $item['website_url'] }}</th>
                                     </tr>
                                 @endforeach
+                                @else
+                                    <a href="{{ route('dashboard') }}">Carica Birrifici</a>
+                                @endif
                             </tbody>
                         </table>
                     </div>
+                    @if(isset($items) && count($items) > 0)
                     {{ $items->links() }}
+                    @endif
                 </div>
             </div>
         </div>

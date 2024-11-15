@@ -13,6 +13,7 @@ class BreweriesController extends Controller
     public function index(Request $request)
     {
         $token = 'Bearer ' . Session::get('apiToken');
+
         $data = Http::withToken($token)
             ->get(route('api.breweries.all'),  [
                 'page' => $request->page,       // Parametro di pagina
@@ -22,14 +23,24 @@ class BreweriesController extends Controller
                 dd($e);
             })->json();
 
-        $paginator = new LengthAwarePaginator(
-            $data['data'], // Elementi della pagina corrente
-            $data['total'], // Totale elementi
-            $data['per_page'], // Elementi per pagina
-            $data['current_page'], // Pagina corrente
-            ['path' => url()->current()] // URL base per i link di paginazione
-        );
+            if ($data) {
+                $paginator = new LengthAwarePaginator(
+                    $data['data'], // Elementi della pagina corrente
+                    $data['total'], // Totale elementi
+                    $data['per_page'], // Elementi per pagina
+                    $data['current_page'], // Pagina corrente
+                    ['path' => url()->current()] // URL base per i link di paginazione
+                );
 
-        return view('dashboard', ['items' => $paginator]);
+                return view('dashboard', ['items' => $paginator]);
+
+            } else {
+
+                return view('dashboard', ['items' => []]);
+            }
+
+
+
+
     }
 }
