@@ -2,45 +2,34 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Http;
-
+use Illuminate\Support\Facades\Session;
 use Illuminate\Pagination\LengthAwarePaginator;
-
 use Illuminate\Http\Request;
+use Illuminate\Http\Client\Response;
+use Illuminate\Http\Client\RequestException;
 
 class BreweriesController extends Controller
 {
     public function index(Request $request)
     {
+        $token = 'Bearer ' . Session::get('apiToken');
+        $data = Http::withToken($token)
+            ->get(route('api.breweries.all'),  [
+                'page' => $request->page,       // Parametro di pagina
+                'per_page' => 10,      // Numero di elementi per pagina
+            ])
+            ->throw(function (Response $response, RequestException $e) {
+                dd($e);
+            })->json();
 
+        $paginator = new LengthAwarePaginator(
+            $data['data'], // Elementi della pagina corrente
+            $data['total'], // Totale elementi
+            $data['per_page'], // Elementi per pagina
+            $data['current_page'], // Pagina corrente
+            ['path' => url()->current()] // URL base per i link di paginazione
+        );
 
-            // Parametri di paginazione
-            //$page = $request->input('page', 1); // Pagina corrente, di default 1
-            $page = $request->query('page', 1);
-
-            $perPage = 10; // Numero di risultati per pagina
-
-            // Effettua la chiamata all'API e ottieni tutti i dati
-            $response = Http::get('https://api.openbrewerydb.org/v1/breweries');
-
-            $allBreweries = collect($response->json()); // Converte i dati in una collezione
-
-            // Divide i dati in base alla pagina e al numero di elementi per pagina
-            $itemsForCurrentPage = $allBreweries->slice(($page - 1) * $perPage, $perPage)->values();
-
-            // Crea il paginatore per i risultati attuali
-            $paginatedBreweries = new LengthAwarePaginator(
-                $itemsForCurrentPage,
-                $allBreweries->count(),
-                $perPage,
-                $page,
-                ['path' => $request->url(), 'query' => $request->query()]
-            );
-
-
-            // Restituisci i dati
-            return ['allItems' => $paginatedBreweries];
-
-
-     //   return response()->json(['error' => 'Failed to fetch data'], 500);
+        return view('dashboard', ['items' => $paginator]);
     }
 }

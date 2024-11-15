@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\BreweriesController;
+use App\Http\Controllers\API\BreweriesController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -12,7 +12,4 @@ Route::get('/user', function (Request $request) {
 
 Route::post('/login', [AuthController::class, 'login']);
 
-route::get('/breweries', [BreweriesController::class, 'index'])->middleware('auth:sanctum');
-
-
-//route::get('/breweries', [BreweriesController::class, 'index']);
+route::get('/breweries', [BreweriesController::class, 'index'])->name('api.breweries.all')->middleware('auth:sanctum');
