@@ -21,10 +21,7 @@ class AuthController extends Controller
         }
         $token = $user->createToken('auth_token')->plainTextToken;
 
-       // app(BreweriesService::class)->getAll(1, 10);
-
         return response()->json(['token' => $token], 200);
-
     }
 }
 

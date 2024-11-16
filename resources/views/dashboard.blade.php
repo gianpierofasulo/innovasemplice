@@ -9,44 +9,36 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
-                    <div id="breweriesSection">
+                    <h2 class="mb-5">Lista di Birrifici</h2>
 
-                                @if(isset($items) && count($items) > 0)
-                                <h2>Lista di Birrifici</h2>
-                                <table id="breweryTable">
-                                    <thead>
-                                        <tr>
-                                            <th>Nome</th>
-                                            <th>Tipo</th>
-                                            <th>Città</th>
-                                            <th>Stato</th>
-                                            <th>Website</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                @foreach ($items as $item)
-                                <tr>
-                                        <th>{{ $item['name'] }}</th>
-                                        <th>{{ $item['brewery_type'] }}</th>
-                                        <th>{{ $item['city'] }}</th>
-                                        <th>{{ $item['country'] }}</th>
-                                        <th>{{ $item['website_url'] }}</th>
-                                    </tr>
-                                @endforeach
-                                @else
-                                    <a href="{{ route('dashboard') }}">Carica Birrifici</a>
-                                @endif
-                            </tbody>
-                        </table>
+                    <table class="min-w-full bg-white border border-gray-200 rounded-lg">
+                        <thead class="bg-gray-100 border-b">
+                            <tr>
+                                <th class="py-3 px-6 text-left text-gray-600 font-medium">Nome</th>
+                                <th class="py-3 px-6 text-left text-gray-600 font-medium">Tipo</th>
+                                <th class="py-3 px-6 text-left text-gray-600 font-medium">Città</th>
+                                <th class="py-3 px-6 text-left text-gray-600 font-medium">Stato</th>
+                                <th class="py-3 px-6 text-left text-gray-600 font-medium">Website</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($items as $item)
+                                <tr class="border-b hover:bg-gray-50">
+                                    <td class="py-3 px-6">{{ $item['name'] }}</td>
+                                    <td class="py-3 px-6">{{ $item['brewery_type'] }}</td>
+                                    <td class="py-3 px-6">{{ $item['city'] }}</td>
+                                    <td class="py-3 px-6">{{ $item['country'] }}</td>
+                                    <td class="py-3 px-6">{{ $item['website_url'] }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>   
+
+                    <div class="mt-5">
+                        {{ $items->links() }}
                     </div>
-                    @if(isset($items) && count($items) > 0)
-                    {{ $items->links() }}
-                    @endif
                 </div>
             </div>
         </div>
     </div>
-
 </x-app-layout>
-
-

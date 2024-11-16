@@ -34,29 +34,21 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerate();
 
 
-                $data = [
-                    'email' => $request->email,
-                    'password' => $request->password,
-                ];
+        $data = [
+            'email' => $request->email,
+            'password' => $request->password,
+        ];
 
 
-                $response = Http::withBody(json_encode($data), 'application/json')
-                        ->withOptions([ ])
-                        ->post( env('APP_URL') . '/api/login');
+        $response = Http::withBody(json_encode($data), 'application/json')
+                ->withOptions([ ])
+                ->post( env('APP_URL') . '/api/login');
 
-
-
-       if ($response->successful()) {
-            // Recupera il token dalla risposta
+        if ($response->successful()) {
             $token = $response->json()['token'];
             session(['apiToken' => $token]);
-
-          // return view('dashboard', ['apiToken' => $token]);
-          return view('dashboard');
-
+            return redirect()->route('dashboard');
         }
-
-
     }
 
     /**
@@ -72,11 +64,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->flush();
 
-
         return redirect('/');
     }
-
-
-
 
 }
