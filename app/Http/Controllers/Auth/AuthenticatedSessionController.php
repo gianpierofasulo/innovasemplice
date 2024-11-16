@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Models\User;
-use Illuminate\Contracts\Session\Session;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -39,14 +39,13 @@ class AuthenticatedSessionController extends Controller
             'password' => $request->password,
         ];
 
-
         $response = Http::withBody(json_encode($data), 'application/json')
                 ->withOptions([ ])
-                ->post( env('APP_URL') . '/api/login');
+                ->post( route('api.login') );
 
         if ($response->successful()) {
             $token = $response->json()['token'];
-            session(['apiToken' => $token]);
+            Session::put('apiToken', $token);
             return redirect()->route('dashboard');
         }
     }

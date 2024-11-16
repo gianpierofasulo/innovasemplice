@@ -10,6 +10,6 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 
-Route::post('/login', [AuthController::class, 'login']);
+Route::post('/login', [AuthController::class, 'login'])->name('api.login');
 
 route::get('/breweries', [BreweriesController::class, 'index'])->name('api.breweries.all')->middleware('auth:sanctum');
